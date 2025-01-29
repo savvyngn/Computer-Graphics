@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Lab 02 Exercise 2</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        "use strict";
+
+        class Rectangle {
+            constructor(width, height, borderChar = '+', fillChar = '-') {
+                this.width = width;
+                this.height = height;
+                this.borderChar = borderChar;
+                this.fillChar = fillChar;
+            }
+
+            draw() {
+                let message = '';
+                
+                for (let j = 0; j < this.width; j++) {
+                    message += this.borderChar;
+                }
+                message += '\n';
+
+                for (let i = 1; i < this.height - 1; i++) {
+                    message += this.borderChar;
+                    for (let j = 1; j < this.width - 1; j++) {
+                        message += this.fillChar;
+                    }
+                    message += this.borderChar + '\n';
+                }
+
+                if (this.height > 1) {
+                    for (let j = 0; j < this.width; j++) {
+                        message += this.borderChar;
+                    }
+                    message += '\n';
+                }
+
+                console.log(message);
+            }
+        }
+
+        var rectangle1 = new Rectangle(2, 2);
+        var rectangle2 = new Rectangle(5, 5);
+        var rectangle3 = new Rectangle(10, 4);
+
+        rectangle1.draw();
+        rectangle2.draw();
+        rectangle3.draw();
+
+        var rectangle4 = new Rectangle(5, 3, '-', '+');
+        rectangle4.draw();
+    </script>
+</body>
+</html>

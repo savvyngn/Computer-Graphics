@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Lab 02 Exercise 1</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        "use strict";
+
+
+        class World {
+            constructor(width, length, x, y) {
+                this.width = width;
+                this.length = length;
+                this.x = x;
+                this.y = y;
+            }
+            moveUp() {
+                y -= 1;
+            }
+            moveDown() {
+                y += 1;
+            }
+            moveRight() {
+                x += 1;
+            }
+            moveLeft() {
+                x -= 1;
+            }
+            draw() {
+                var message = "";
+                for (var i = 0; i < this.length; i++) {
+                    for (var j = 0; j < this.width - 2; j++) {
+                        if (j == (this.x -1) && i == (this.y - 1) ){
+                            message += "p"
+                        }
+                        else {
+                            message += ","
+                        }
+                        
+                    }
+                    message += "\n";
+                }
+                
+                console.log(message);
+            }
+        }
+        var world = new World(10, 10, 6, 9);
+        world.draw();
+
+        // function keyDownFunction(event) {
+        //     if (event.key === "ArrowDown") { // arrow down(↓) key is pressed
+
+        //     }
+        // }
+        // // add an event listener that calls keyDownFunction
+        // // whenever any key is pressed.
+        // window.addEventListener("keydown", keyDownFunction);
+    </script>
+</body>
+
+</html>
