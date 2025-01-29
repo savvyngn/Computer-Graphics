@@ -1,84 +1,124 @@
-!doctype html>
+<!doctype html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
-    <title>Lab 02 Exercise 3</title>
+    <title>ENTER EXERCISE NAME HERE</title>
 </head>
 
 <body>
     <script type="text/javascript">
-        "use strict";
+        "use strict"
+        class World { // top left corner is posX = 0, posY = 0
+            constructor(sizeX, sizeY, posArray, goalArray, keyArray, hasKey = true, obstacleArray = []) {
+                this.sizeX = sizeX
+                this.sizeY = sizeY
+                this.posX = posArray[0]
+                this.posY = posArray[1]
+                this.goalX = goalArray[0]
+                this.goalY = goalArray[1]
+                this.keyX = keyArray[0]
+                this.keyY = keyArray[1]
+                this.hasKey = hasKey
+                this.objectX = [
+                    this.posX, this.goalX, this.keyX
+                ]
+                this.objectY = [
+                    this.posY, this.goalY, this.keyY
+                ]
+                this.moveHandler = null
+            }
 
-        
-        class World {
-            constructor(width, length, x, y) {
-                this.width = width;
-                this.length = length;
-                this.x = x;
-                this.y = y;
-            }
-            moveUp() {
-                y -= 1;
-            }
-            moveDown() {
-                y += 1;
-            }
-            moveRight() {
-                x += 1;
-            }
-            moveLeft() {
-                x -= 1;
-            }
-            draw() {
-                var message = "";
-                for (var i = 0; i < this.length; i++) {
-                    for (var j = 0; j < this.width; j++) {
-                        if (j == (this.x -1) && i == (this.y - 1) ){
-                            message += "p"
+            draw(message = "") {
+                console.clear()
+
+                let canvas = ""
+                for (var i = 0; i < this.sizeY; i++) {
+                    if (this.objectY.includes(i)) { // at least one object in line
+                        for (var j = 0; j < this.sizeX; j++) {
+                            if (this.objectX.includes(j)) {
+                                if (j === this.posX && i === this.posY) {
+                                    canvas += "P"
+                                } else if (j === this.goalX && i === this.goalY) {
+                                    canvas += "G"
+                                } else if (j === this.keyX && i === this.keyY) {
+                                    canvas += "K"
+                                } else {
+                                    canvas += ","
+                                }
+                            } else {
+                                canvas += ","
+                            }
                         }
-                        else {
-                            message += ","
-                        }
-                        
+                    } else { // no objects in line
+                        canvas += ",".repeat(this.sizeX)
                     }
-                    message += "\n";
+                    canvas += "\n"
                 }
-                
-                console.log(message);
+                canvas += this.posX + " " + this.posY + "\n"
+                canvas += message
+                console.log(canvas)
+            }
+
+            move(event) {
+                let message = ""
+                if (event.key === "ArrowRight") {
+                    message = this.update(this.posX + 1, this.posY)
+                } else if (event.key === "ArrowLeft") {
+                    message = this.update(this.posX - 1, this.posY)
+                } else if (event.key === "ArrowDown") {
+                    message = this.update(this.posX, this.posY + 1)
+                } else if (event.key === "ArrowUp") {
+                    message = this.update(this.posX, this.posY - 1)
+                }
+                this.draw(message)
+            }
+
+            update(newPosX, newPosY) {
+                // check if new position is within bounds
+                if (newPosX >= 0 && newPosX < this.sizeX &&
+                    newPosY >= 0 && newPosY < this.sizeY) {
+
+                    // update position
+                    this.posX = newPosX
+                    this.posY = newPosY
+
+                    // update objectX and objectY
+                    this.objectX[0] = this.posX
+                    this.objectY[0] = this.posY
+
+                    // check if reached goal
+                    if (this.posX === this.goalX && this.posY === this.goalY) {
+                        if (this.hasKey) {
+                            // remove event listener when goal is reached
+                            window.removeEventListener("keydown", this.moveHandler)
+                            return "You won! Game Over!"
+                        }
+                        return "You need the key to finish!"
+                    }
+
+                    // check if got key
+                    if (this.posX === this.keyX && this.posY === this.keyY) {
+                        this.hasKey = true
+
+                        // remove key from world
+                        this.keyX = -1
+                        this.keyY = -1
+                        return "Key obtained!"
+                    }
+
+                    return "Moved"
+                }
+                return "Cannot move outside the world"
             }
         }
-        
-        function keyDownFunction(event) {
-                if(event.key == "ArrowDown") {
-                    world.moveDown();
-                }
-                if(event.key == "ArrowUp") {
-                    world.moveUp();
-                }
-                if(event.key == "ArrowLeft") {
-                    world.moveLeft();
-                }
-                if(event.key == "ArrowRight") {
-                    world.moveRight();
-                }
-                console.clear();
-                world.draw();
+
+        var world = new World(12, 10, [2, 2], [5, 3], [1, 1], false)
+        world.draw()
+        world.moveHandler = function(event) {
+            world.move(event);
         }
-
-        var world = new World(10, 10, 6, 9);
-        world.draw();
-        window.addEventListener("keydown", keyDownFunction);
-
-
-        // function keyDownFunction(event) {
-        //     if (event.key === "ArrowDown") { // arrow down(↓) key is pressed
-
-        //     }
-        // }
-        // // add an event listener that calls keyDownFunction
-        // // whenever any key is pressed.
-        // window.addEventListener("keydown", keyDownFunction);
+        window.addEventListener("keydown", world.moveHandler)
     </script>
 </body>
 
